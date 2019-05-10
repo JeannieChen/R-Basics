@@ -1,37 +1,19 @@
-## Welcome to GitHub Pages
+## Introduction
 
-You can use the [editor on GitHub](https://github.com/JeannieChen/R-Basics/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+R-Basic includes some of my daily tasks using R.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+### Content Category
+- Functions for data cleanse, transformation (1)
+- Statistical models for analysis, prediction (2)
+- ODBC Connection (3)
+- Data visualization (4)
+- Other fun stuff (5)
 
-### Markdown
+### List
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+1. CHUNK-FIL-A.R (1): Function that will take a large CSV file in location X, split it up Y number of times, then write it back in Z location with N[i] as the file name, and CN as the column names.
 
-```markdown
-Syntax highlighted code block
+2. RODBC template.R (3): ODBC connection setup template. Coommon functions to execute queries and retrieve datdaset.
 
-# Header 1
-## Header 2
-### Header 3
+3. TF-IDF.R (2): Function that implement topic modeling by simply giving text dataset, target column, grouping tags and plot(boolean value. If TRUE output plots of analysis) 
 
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/JeannieChen/R-Basics/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
