@@ -17,3 +17,6 @@ R-Basic includes some of my daily tasks using R.
 
 3. TF-IDF.R (2): Function that implements topic modeling by simply giving text dataset, target column, grouping tags and plot(boolean value. If TRUE output plots of analysis).
 
+4. Ames (STAT 4620 Final Project) (2): The main question of interest in this dataset is How do home features add up to its price tag? This analysis involves forming a predictive model for the response variable, SalePrice, as a function of the 79 predictor variables. The 79 predictor variables are described in the file data description.txt.
+- 4620_project.Rmd: dataset EDA
+- 4620_model.R: Propose  a  predictive  model  for  the  response  variable  using the train.dat training data and provide evidence of the appropriateness of your model
