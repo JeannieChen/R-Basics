@@ -1,0 +1,130 @@
+---
+title: "Ames Project - EDA"
+author: "Jeanie Chen"
+date: "10/17/2018"
+output: html_document
+---
+
+```{r message=FALSE}
+#load data
+library(readr)
+test <- read_csv("~/Desktop/Ames/newtest.csv")
+train <- read_csv("~/Desktop/Ames/train.csv")
+```
+
+#### 1. Are there any problems with the data?
+
+Below are some summary statistics of the training dataset:  
+
+``` {r}
+# summary of dataset
+library(skimr)
+skim.summary = train %>% skim()
+skim.summary
+```
+
+Note: The histograms are not viewable in the .html file. The R code will have to be run through RStudio within its RMarkdown file.
+
+As shown under the "missing" columns, the majority of the variables across all 1460 training observations do not have missing values. For example, variables such as $BldgType$ and $YrSold$ have 0 missing values. However, there are several variables which consist of some missing values, such as the $Garage$ variables and $MasVnrArea$. Additionally, there are variables whose majority consist of many missing values, such as $MiscFeatures$. 1406 of the 1460 training observations have a $MiscFeature$ value of NA. Additionally, there are several different values for this variable as opposed to being just 1 possible value (similar to an "on/off" indicator variable). Other variables such as $Alley$ and $FireplaceQu$ exhibit similar findings. The below R code shows these numeric findings:  
+
+``` {r}
+# number of NA MiscFeature values
+sum(is.na(train[is.na(train$MiscFeature),"MiscFeature"]))
+# all possible values of MiscFeature
+unique(train$MiscFeature)
+```
+
+These missing values cause problems for our data because in the above case, the NA value seems to be the "normal case" for these observations (i.e. usually, we do not expect to see a shed, a second garage, a tennis court, etc). So, we could possibly categorize these NAs to be it's own category. However, there are other variables that have much fewer NA values (such as $GarageYrBlt$), in which case those values might actually be missing and unable to be categorized as some zero or default value. As such, it will be difficult to differentiate between the NA values and how to handle them for each variable, as they may each affect $SalePrice$ differently.
+
+#### 2. What kind of variables do you have?
+```{r}
+# data size and structure
+dim(test)
+dim(train)
+# skim.summary    as shown above in Question 1
+```
+
+In the training data set, there are 1460 observations with total 81 variables. 79 of them (exclude variables $id$ and $SalePrice$) are explanatory variables describing every aspect of residential homes in Ames, Iowa. According to the skim.summary, among explanatory variables, there are 36 integer variables, such as $MSSubClass$, $LotFrontage$ and $LotAream$ and 43 factor variables, such as $MSZoning$, $Street$, $LotShape$. The majority of factor variables have less than 10 different unique levels, while some factor variables such as $Neighborhood$
+
+#### 3. Is there any missing data?
+```{r}
+#list rows of data that have missing values 
+missing_row <- train[!complete.cases(train),]
+nrow(missing_row) #1460
+```
+We find that every row in the training dataset has at least one missing value. However, a majority of them are due to the variables with many NA values, as noted in the response to Question 1, so perhaps some of this missing data is not necessarily "missing" in the literal sense, but rather just taking on some null value. On the other hand, there are variables that contain few NA values, so perhaps those are actually missing data. Nevertheless, below are the variables which contain missing/NA values:
+
+```{r}
+NAcol <- which(colSums(is.na(missing_row)) > 0)
+sort(colSums(sapply(missing_row[NAcol], is.na)), decreasing = TRUE)
+cat('There are', length(NAcol), 'columns with missing values.')
+```
+
+#### 4. Can  you  detect  early  signs  of  what  variables  are  likely  to  be  important  in  predicting  the response?
+As we want to know how do home features add up to its price tag, we look at those 79 explanatory variables that might be potentially useful when predicting the $SalePrice$. Let's observe all numeric variables' correlations with $SalePrice$ first:
+
+```{r}
+library(corrplot)
+numericVars <- which(sapply(train, is.numeric)) #index vector numeric variables
+numericVarNames <- names(numericVars) #saving names vector for use later on
+cat('There are', length(numericVars), 'numeric variables in training set.')
+train_numVar <- train[, numericVars] 
+cor_numVar <- cor(train_numVar, use="pairwise.complete.obs") #correlations of all numeric variables
+
+#sort on decreasing correlations with SalePrice
+cor_sorted <- as.matrix(sort(cor_numVar[,'SalePrice'], decreasing = TRUE))
+highCor <- names(which(apply(cor_sorted, 1, function(x) abs(x) > 0.5)))
+cor_numVar <- cor_numVar[highCor, highCor]
+corrplot.mixed(cor_numVar, tl.col="grey", tl.pos = "lt")
+```
+
+Here we can observe all variables with the highest correlation (>0.5) with our response variables. Variables $OverallQual$,$GrLivArea$, $GarageCars$, $GarageArea$ and $TotalBsmtSF$ are top 5 numeric variables that are highly correlated with $SalePrice$, which are likely to be important in predicting the response.
+
+#### 5. Does there appear to be potentially problematic collinearity amongst the predictor variables?
+From the previous plot, we can also conclude that the multicollinearity issue exists in our data set. For example, $GrLivArea$ is highly correlated with $TotRmsAbv$ (0.83), $GarageArea$ and $GarageCars$ have correlation 0.88, and $1stFlrSF$ is highly correlated with $TotalBsmtSF$ (0.82), etc.
+
+#### 6. What are the key figures or numerical summaries that describe the most important aspects of the data?
+
+```{r}
+library(ggplot2)
+
+ggplot(data=train_numVar,aes(x=SalePrice)) + 
+  geom_histogram()
+
+ggplot(data=train_numVar,aes(x=OverallQual)) + 
+  geom_histogram()
+
+ggplot(data=train_numVar,aes(x=GrLivArea)) + 
+  geom_histogram()
+
+ggplot(data=train_numVar,aes(x=GarageCars)) + 
+  geom_histogram()
+
+ggplot(data=train_numVar,aes(x=GarageArea)) + 
+  geom_histogram()
+
+ggplot(data=train_numVar,aes(x=TotalBsmtSF)) + 
+  geom_histogram()
+```
+
+Looking at histograms of $SalePrice$ and the variables most correlated with it, We see that they are all positively skewed and most have noticeable outliers. 
+
+```{r}
+ggplot(data = train,aes(x=GrLivArea,y=SalePrice)) +
+  geom_point()+
+  geom_smooth()
+ggplot(data = train,aes(x=GarageArea,y=SalePrice)) +
+  geom_point()+
+  geom_smooth()
+ggplot(data = train,aes(x=TotalBsmtSF,y=SalePrice)) +
+  geom_point() +
+  geom_smooth()
+```
+
+Here we can see the relationship between $SalePrice$ and the most correlated variables. The smooth line shows a mostly linear relation between the predictor variables and $SalePrice$.
+
+#### 7. Does your EDA suggest to you what modeling approaches you should aim to try?
+
+With such a large number of variables to choose from, using lasso would be a solid choice. We would want to find variables that seem more important and try placing these into a lasso or ridge regression model so that we can further reduce the number of variables being considered. 
+
+
