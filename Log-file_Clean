@@ -1,0 +1,43 @@
+####Path to files folder
+files <- list.files(path = "H:/BI/Jeanie/Folder", pattern = ".log", full.names = TRUE)
+
+####Process each file
+for (i in seq_along(files)) {  # seq_along(files) == 1:length(files)
+  library(readr)
+  mystring <- read_file(files[i]) # Save in a long string
+ 
+  # ..
+  
+  # Extract string between the first pair of '( )'
+  string_split$temp =  mapply(function(x) {
+    gsub("[\\(\\)]", "", regmatches(x, gregexpr("\\(.*?\\)", x))[[1]])[1]
+  }, x = string_split$string)
+  
+  # Extract string after ';'
+  string_split$in_use = sub('.*;\\s*','', string_split$temp)
+  # Extract string before ';'
+  string_split$total = sub(';.*$','',  string_split$temp)
+  
+  # Extract digits from string 
+  matches <- regmatches(string_split$total, gregexpr("[[:digit:]]+", string_split$total))
+  string_split$total = as.numeric(unlist(matches))
+  matches <- regmatches(string_split$in_use, gregexpr("[[:digit:]]+", string_split$in_use))
+  string_split$in_use = as.numeric(unlist(matches))
+  
+ 
+  # ..
+  
+  # Expand dataframe based on a column value - df[rep(row.names(df), df$val), 1:ncol(df)]
+  string_split.expanded <- string_split[rep(row.names(string_split), string_split$in_use), 1:ncol(string_split)]
+ 
+  # ..
+  
+  # Remove duplicated rows
+  rlt = rlt[!duplicated(rlt),]
+  
+  # ..
+  
+  # Append each rlt. Save text file.
+  write.table(x = rlt, file = file.path('C:/Users/Desktop/rlt.txt'),append = TRUE, row.names = FALSE, col.names = FALSE, sep = "\t")
+  gc()
+}
