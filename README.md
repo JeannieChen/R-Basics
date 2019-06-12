@@ -24,3 +24,5 @@ R-Basic includes some of my daily tasks using R.
 5. LDA.R (2): Function that implements LDA (Latent Dirichlet Allocation) models: Top_terms_by_topic_LDA(textContent, number_of_topics). Output analysis of topics in different plots altogether.
 
 6. geom_tile-in-plot_ly.R (1)(4): Supplementation of geom_tile() function using 'heatmap' in plot_ly. Define colorScale(seg,colorset) and tickvals based on flags in input dataset (live data). Reshape data and convert it into matrix. Define discrete color bar for heatmap in plot_ly. Output: a plot_ly object with same features as using geom_tile() from ggplot2. Reduce rendering time significantly.
+
+7. Lof-file_Clean.R (1): Given the path to the folder and process each log file each time. Scripts to extract/truncate strings, etc.
