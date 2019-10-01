@@ -27,4 +27,4 @@ R-Basic includes some of my daily tasks using R.
 
 7. Log-file_Clean.R (1): Given the path to the folder and process each log file each time. Scripts to extract/truncate strings, etc.
 
-8. Discrete Custom Color in Heatmap using Plot_ly(4): Assign discrete custom color based on a column of variable in the dataset then use plot_ly to build an interactive heatmap (alternative to geom_tile in ggplots/ggplotly).
+8. Discrete_Custom_Color_Plot_ly_Heatmap.R(4): Assign discrete custom color based on a column of variable in the dataset then use plot_ly to build an interactive heatmap (alternative to geom_tile in ggplots/ggplotly).
