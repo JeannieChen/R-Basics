@@ -13,6 +13,9 @@ coords2country = function(points)
   
   # return the ADMIN names of each country
   indices$ADMIN  
+  #indices$ISO3 # returns the ISO3 code 
+  #indices$continent   # returns the continent (6 continent model)
+  #indices$REGION   # returns the continent (7 continent model)
 
 }
 
