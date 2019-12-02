@@ -28,3 +28,5 @@ R-Basic includes some of my daily tasks using R.
 7. Log-file_Clean.R (1): Given the path to the folder and process each log file each time. Scripts to extract/truncate strings, etc.
 
 8. Discrete_Custom_Color_Plot_ly_Heatmap.R(4): Assign discrete custom color based on a column of variable in the dataset then use plot_ly to build an interactive heatmap (alternative to geom_tile in ggplots/ggplotly).
+
+9.convert_long_lat_to_country.R(1): Convert lat/long to Country name without using Google API
